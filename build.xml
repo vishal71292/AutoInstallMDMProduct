@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<project name="Automate build install" basedir="." default="build-jar">
+    
+	<target name="init" description="initializes required directories as properties">
+		<property name="src.dir" value="src"/>
+		<property name="build.dir" value="classes"/>
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<!--
+	lib/*.jar and ./classes is set in class path 
+	-->
+	<target name="setPath" description="This is used to set class path." depends="init">
+		<path id="master-classpath">
+		<!--	<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+			</fileset> -->
+			<pathelement path="${build.dir}"/>
+		</path>
+		
+    </target>
+	
+	<target name="clean" description="Clean output directories" depends="setPath">
+      <delete>
+         <fileset dir="${build.dir}">
+            <include name="**/*.class"/>
+         </fileset>
+      </delete>
+	</target>
+	
+     <target name="build" description="Compile source tree java files" depends="clean">
+		<javac destdir="${build.dir}">
+			<src path="${src.dir}"/>
+			<classpath refid="master-classpath"/>
+		</javac>
+	</target>
+	
+	 <target name="manifestclasspath" description="initialize classpath for WeeklyMailSender.jar" depends="build">
+		<manifestclasspath property="jar.classpath" jarfile="WeeklyMailSender.jar">
+			<classpath refid="master-classpath"/>
+		</manifestclasspath>
+	</target>
+	<target name="cleanjar" description="deletes WeeklyMailSender.jar if it is aready present" depends="manifestclasspath"> 
+		<delete>
+		<filelist dir=".">
+			<file name="autobuildinstall.jar"/>
+		</filelist>
+		</delete>
+	</target>
+
+	<target name="build-jar" description="used for building jar from class files in classes folder." depends="cleanjar">
+		<jar destfile="autobuildinstall.jar"
+			 basedir="${build.dir}">
+      
+			<manifest>		
+				<attribute name="Main-Class" value="download.DownloadUtil"/>
+				<attribute name="Class-Path" value="${jar.classpath}"/>
+			</manifest>
+
+		</jar>
+	</target>
+
+
+</project>
