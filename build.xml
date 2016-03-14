@@ -43,13 +43,13 @@
 	<target name="cleanjar" description="deletes WeeklyMailSender.jar if it is aready present" depends="manifestclasspath"> 
 		<delete>
 		<filelist dir=".">
-			<file name="autobuildinstall.jar"/>
+			<file name="autoMDM.jar"/>
 		</filelist>
 		</delete>
 	</target>
 
 	<target name="build-jar" description="used for building jar from class files in classes folder." depends="cleanjar">
-		<jar destfile="autobuildinstall.jar"
+		<jar destfile="autoMDM.jar"
 			 basedir="${build.dir}">
       
 			<manifest>		
