@@ -1,4 +1,4 @@
-java -jar autobuildinstall.jar %1 %2 
+java -jar autoMDM.jar %1 %2 
 SET fileDownload=%2%
 if "%fileDownload%"=="" SET fileDownload="%cd%"
 7z x %fileDownload%/AdventNetMDM_WPack.zip -o%fileDownload%
